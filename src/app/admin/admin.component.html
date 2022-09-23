@@ -1,0 +1,25 @@
+<div class="container p-4">
+  <h1>Data Table Employee</h1>
+  <button class="btn btn-primary">
+    <em class="fas fa-plus"></em>
+    Add
+  </button>
+  <br />
+  <br />
+
+  <ngid-table [model]="tableModel" stringUrl="http://localhost:3000/employess">
+    <ng-template #actionButtons let-record>
+      <button class="btn btn-primary btn-sm" (click)="handleView(record)">
+        <em class="fas fa-search"></em>
+      </button>
+      <button class="btn btn-warning btn-sm" (click)="handleEdit(record)">
+        <em class="fas fa-pen-alt"></em>
+      </button>
+      <button class="btn btn-danger btn-sm" (click)="handleDelete(record)">
+        <em class="fas fa-trash"></em>
+      </button>
+    </ng-template>
+  </ngid-table>
+  <br />
+  <br />
+</div>

@@ -1,0 +1,143 @@
+<div class="simplr-table">
+  <div class="simplr-table-header">
+    <div class="input-group input-search">
+      <span class="input-group-text">
+        <em class="fas fa-filter"></em>
+      </span>
+      <span class="input-group-text">
+        <em class="fas fa-search"></em>
+      </span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Username"
+        aria-label="Username"
+        aria-describedby="basic-addon1"
+        (input)="handleSearch($event)"
+      />
+    </div>
+  </div>
+  <div class="simplr-table-body">
+    <div class="table-responsive">
+      <table class="table simplr-table">
+        <thead>
+          <tr *ngFor="let column of state.columnsList; let i = index">
+            <th
+              class="th-no"
+              [attr.rowspan]="state.columnsList.length"
+              *ngIf="i === 0"
+            >
+              <div class="th-content">
+                <span class="th-text"> No </span>
+                <!-- <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [id]="0"
+                      [indeterminate]="true"
+                    />
+                    <label class="form-check-label" [for]="0"> </label>
+                  </div> -->
+              </div>
+            </th>
+            <!-- <th class="sortable sort-asc"> -->
+            <th
+              [ngClass]="[
+                c.sortable && !c.model.childrens ? 'sortable' : '',
+                state.sortField === c.model.field && state.sortOrder
+                  ? 'sort-' + (state.sortOrder | lowercase)
+                  : ''
+              ]"
+              *ngFor="let c of column"
+              (click)="handleSort(c)"
+              [attr.colspan]="c.model.childrens ? c.model.childrens.length : 1"
+              [attr.rowspan]="
+                c.model.childrens ? 1 : state.columnsList.length - i
+              "
+            >
+              <div
+                class="th-content"
+                [ngClass]="c.model.childrens ? 'justify-content-center' : ''"
+              >
+                <span class="th-text">{{ c.model.header }}</span>
+                <em
+                  class="fas fa-sort"
+                  *ngIf="c.sortable && !c.model.childrens"
+                ></em>
+              </div>
+            </th>
+            <th
+              class="th-action"
+              *ngIf="actionButtonsTmpl && i === 0"
+              [attr.rowspan]="state.columnsList.length"
+            >
+              <div class="th-content">
+                <span class="th-text"> Action </span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of state.rows; let i = index">
+            <td>
+              <div class="td-content">
+                {{ i + 1 }}
+                <!-- <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [id]="item + 1"
+                    />
+                    <label class="form-check-label" [for]="item + 1"> </label>
+                  </div> -->
+              </div>
+            </td>
+            <td *ngFor="let column of row.columns">
+              <div class="td-content">
+                <div class="td-text">
+                  {{ column.value }}
+                </div>
+              </div>
+            </td>
+            <td class="td-action" *ngIf="actionButtonsTmpl">
+              <div class="td-content">
+                <ng-container
+                  *ngTemplateOutlet="
+                    actionButtonsTmpl;
+                    context: { $implicit: row.model.record }
+                  "
+                ></ng-container>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="simplr-table-footer">
+    <div class="footer-left">
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        style="width: 70px"
+        (change)="handleChangePerPage($event)"
+      >
+        <option
+          [value]="perPage"
+          *ngFor="let perPage of state.perPages"
+          [selected]="perPage === state.pagination.perPage"
+        >
+          {{ perPage }}
+        </option>
+      </select>
+    </div>
+    <div class="footer-right">
+      <ngb-pagination
+        [collectionSize]="120"
+        [page]="1"
+        [maxSize]="5"
+        [boundaryLinks]="true"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>
